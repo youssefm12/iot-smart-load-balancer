@@ -1,0 +1,109 @@
+version: '3.8'
+
+services:
+  broker:
+    image: eclipse-mosquitto:2
+    container_name: iot-broker
+    ports:
+      - "1883:1883"
+    volumes:
+      - ./docker/mosquitto/config:/mosquitto/config:ro
+      - mosquitto-data:/mosquitto/data
+    restart: always
+
+  nodered:
+    image: nodered/node-red:latest
+    container_name: iot-nodered
+    ports:
+      - "1880:1880"
+    volumes:
+      - ./docker/nodered/data:/data
+    environment:
+      - TZ=Europe/Paris
+    depends_on:
+      - broker
+    restart: always
+
+  influxdb:
+    image: influxdb:2.7
+    container_name: iot-influxdb
+    ports:
+      - "8086:8086"
+    environment:
+      - DOCKER_INFLUXDB_INIT_MODE=setup
+      - DOCKER_INFLUXDB_INIT_USERNAME=admin
+      - DOCKER_INFLUXDB_INIT_PASSWORD=admin1234
+      - DOCKER_INFLUXDB_INIT_ORG=iot-org
+      - DOCKER_INFLUXDB_INIT_BUCKET=server-metrics
+      - DOCKER_INFLUXDB_INIT_ADMIN_TOKEN=my-super-secret-auth-token
+    volumes:
+      - influxdb-data:/var/lib/influxdb2
+    restart: always
+
+  grafana:
+    image: grafana/grafana:latest
+    container_name: iot-grafana
+    ports:
+      - "3000:3000"
+    environment:
+      - GF_SECURITY_ADMIN_PASSWORD=admin
+      - GF_AUTH_ANONYMOUS_ENABLED=true
+      - GF_AUTH_ANONYMOUS_ORG_ROLE=Viewer
+    volumes:
+      - ./docker/grafana/provisioning:/etc/grafana/provisioning:ro
+      - ./docker/grafana/dashboards:/var/lib/grafana/dashboards:ro
+    depends_on:
+      - influxdb
+    restart: always
+
+  node1:
+    build: .
+    container_name: iot-node1
+    environment:
+      - SERVER_ID=1
+      - MQTT_HOST=broker
+      - MQTT_USER=iot_admin
+      - MQTT_PASS=iot_secure_123
+    depends_on:
+      - broker
+    restart: always
+
+  node2:
+    build: .
+    container_name: iot-node2
+    environment:
+      - SERVER_ID=2
+      - MQTT_HOST=broker
+      - MQTT_USER=iot_admin
+      - MQTT_PASS=iot_secure_123
+    depends_on:
+      - broker
+    restart: always
+
+  node3:
+    build: .
+    container_name: iot-node3
+    environment:
+      - SERVER_ID=3
+      - MQTT_HOST=broker
+      - MQTT_USER=iot_admin
+      - MQTT_PASS=iot_secure_123
+    depends_on:
+      - broker
+    restart: always
+
+  node4:
+    build: .
+    container_name: iot-node4
+    environment:
+      - SERVER_ID=4
+      - MQTT_HOST=broker
+      - MQTT_USER=iot_admin
+      - MQTT_PASS=iot_secure_123
+    depends_on:
+      - broker
+    restart: always
+
+volumes:
+  influxdb-data:
+  mosquitto-data:

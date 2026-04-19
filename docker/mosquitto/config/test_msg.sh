@@ -1,0 +1,2 @@
+mosquitto_pub -h localhost -t "servers/server-test/metrics" -m '{"server_id":"HEALTHY_SERVER","cpu":30.0,"ram":40.0,"network":100,"load_score":35.0,"timestamp":1713500000}' -u iot_admin -P iot_secure_123
+mosquitto_pub -h localhost -t "servers/server-test/metrics" -m '{"server_id":"TEST_SERVER_T","cpu":99.0,"ram":99.0,"network":900,"load_score":99.9,"timestamp":1713500000}' -u iot_admin -P iot_secure_123

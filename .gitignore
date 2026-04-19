@@ -1,0 +1,22 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+venv/
+.env
+
+# Docker & Persistence
+docker/influxdb/data/
+docker/mosquitto/data/
+docker/grafana/data/
+*.log
+
+# IDEs
+.vscode/
+.idea/
+.DS_Store
+
+# Node-RED
+docker/nodered/data/node_modules/
+docker/nodered/data/.config.json*
+docker/nodered/data/.sessions.json*

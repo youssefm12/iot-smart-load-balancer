@@ -1,0 +1,908 @@
+{
+  "annotations": {
+    "list": [
+      {
+        "builtIn": 1,
+        "datasource": {
+          "type": "grafana",
+          "uid": "-- Grafana --"
+        },
+        "enable": true,
+        "hide": true,
+        "iconColor": "rgba(0, 211, 255, 1)",
+        "name": "Annotations & Alerts",
+        "type": "dashboard"
+      }
+    ]
+  },
+  "editable": true,
+  "fiscalYearStartMonth": 0,
+  "graphTooltip": 1,
+  "id": 1,
+  "links": [],
+  "liveNow": true,
+  "panels": [
+    {
+      "collapsed": false,
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 0
+      },
+      "id": 100,
+      "title": "📡 SYSTEM OVERVIEW",
+      "type": "row"
+    },
+    {
+      "datasource": {
+        "type": "influxdb",
+        "uid": "InfluxDB"
+      },
+      "gridPos": {
+        "h": 4,
+        "w": 6,
+        "x": 0,
+        "y": 1
+      },
+      "id": 20,
+      "title": "System Health",
+      "type": "stat",
+      "targets": [
+        {
+          "datasource": {
+            "type": "influxdb",
+            "uid": "InfluxDB"
+          },
+          "query": "from(bucket: \"server-metrics\")\n  |> range(start: -1m)\n  |> filter(fn: (r) => r._measurement == \"server_metrics\" and r._field == \"load_score\")\n  |> last()\n  |> group()\n  |> mean(column: \"_value\")\n  |> map(fn: (r) => ({r with _value: 100.0 - r._value}))",
+          "refId": "A"
+        }
+      ],
+      "options": {
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "colorMode": "background",
+        "graphMode": "none",
+        "textMode": "auto",
+        "justifyMode": "center",
+        "orientation": "auto"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "percent",
+          "min": 0,
+          "max": 100,
+          "color": {
+            "mode": "thresholds"
+          },
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "red",
+                "value": null
+              },
+              {
+                "color": "#EAB839",
+                "value": 20
+              },
+              {
+                "color": "green",
+                "value": 50
+              }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "datasource": {
+        "type": "influxdb",
+        "uid": "InfluxDB"
+      },
+      "gridPos": {
+        "h": 4,
+        "w": 6,
+        "x": 6,
+        "y": 1
+      },
+      "id": 21,
+      "title": "Active Servers",
+      "type": "stat",
+      "targets": [
+        {
+          "datasource": {
+            "type": "influxdb",
+            "uid": "InfluxDB"
+          },
+          "query": "from(bucket: \"server-metrics\")\n  |> range(start: -1m)\n  |> filter(fn: (r) => r._measurement == \"server_metrics\" and r._field == \"load_score\")\n  |> last()\n  |> group()\n  |> count()",
+          "refId": "A"
+        }
+      ],
+      "options": {
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "colorMode": "background",
+        "graphMode": "none",
+        "textMode": "auto",
+        "justifyMode": "center"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "red",
+                "value": null
+              },
+              {
+                "color": "#EAB839",
+                "value": 2
+              },
+              {
+                "color": "green",
+                "value": 4
+              }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "datasource": {
+        "type": "influxdb",
+        "uid": "InfluxDB"
+      },
+      "gridPos": {
+        "h": 4,
+        "w": 6,
+        "x": 12,
+        "y": 1
+      },
+      "id": 22,
+      "title": "Avg CPU Cluster",
+      "type": "stat",
+      "targets": [
+        {
+          "datasource": {
+            "type": "influxdb",
+            "uid": "InfluxDB"
+          },
+          "query": "from(bucket: \"server-metrics\")\n  |> range(start: -1m)\n  |> filter(fn: (r) => r._measurement == \"server_metrics\" and r._field == \"cpu\")\n  |> last()\n  |> group()\n  |> mean(column: \"_value\")",
+          "refId": "A"
+        }
+      ],
+      "options": {
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "colorMode": "background",
+        "graphMode": "area",
+        "textMode": "auto",
+        "justifyMode": "center"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "percent",
+          "min": 0,
+          "max": 100,
+          "color": {
+            "mode": "thresholds"
+          },
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "#EAB839",
+                "value": 60
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "datasource": {
+        "type": "influxdb",
+        "uid": "InfluxDB"
+      },
+      "gridPos": {
+        "h": 4,
+        "w": 6,
+        "x": 18,
+        "y": 1
+      },
+      "id": 23,
+      "title": "Peak Load",
+      "type": "stat",
+      "targets": [
+        {
+          "datasource": {
+            "type": "influxdb",
+            "uid": "InfluxDB"
+          },
+          "query": "from(bucket: \"server-metrics\")\n  |> range(start: -5m)\n  |> filter(fn: (r) => r._measurement == \"server_metrics\" and r._field == \"load_score\")\n  |> max()",
+          "refId": "A"
+        }
+      ],
+      "options": {
+        "reduceOptions": {
+          "calcs": [
+            "max"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "colorMode": "background",
+        "graphMode": "area",
+        "textMode": "auto",
+        "justifyMode": "center"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "percent",
+          "min": 0,
+          "max": 100,
+          "color": {
+            "mode": "thresholds"
+          },
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "#EAB839",
+                "value": 60
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "collapsed": false,
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 5
+      },
+      "id": 101,
+      "title": "🖥️ DIGITAL TWIN — INFRASTRUCTURE TOPOLOGY",
+      "type": "row"
+    },
+    {
+      "datasource": {
+        "type": "influxdb",
+        "uid": "InfluxDB"
+      },
+      "gridPos": {
+        "h": 14,
+        "w": 16,
+        "x": 0,
+        "y": 6
+      },
+      "id": 10,
+      "title": "",
+      "type": "canvas",
+      "transparent": true,
+      "options": {
+        "inlineEditing": false,
+        "showAdvancedTypes": true,
+        "panZoom": false,
+        "zoomToContent": false,
+        "tooltip": {
+          "mode": "single"
+        },
+        "root": {
+          "background": {
+            "color": {
+              "fixed": "transparent"
+            }
+          },
+          "border": {
+            "color": {
+              "fixed": "transparent"
+            }
+          },
+          "elements": [
+            {
+              "id": "lb_icon",
+              "name": "Load Balancer",
+              "type": "icon",
+              "placement": {
+                "top": 200,
+                "left": 350,
+                "width": 100,
+                "height": 100
+              },
+              "options": {
+                "icon": {
+                  "id": "cloud"
+                },
+                "color": {
+                  "fixed": "#00D3FF"
+                }
+              }
+            },
+            {
+              "id": "server1",
+              "name": "Server 1",
+              "type": "rectangle",
+              "placement": {
+                "top": 50,
+                "left": 80,
+                "width": 140,
+                "height": 80
+              },
+              "options": {
+                "content": "🇫🇷 Paris — S01",
+                "text": {
+                  "size": 14,
+                  "color": "white"
+                },
+                "color": {
+                  "field": "server1",
+                  "mode": "thresholds"
+                },
+                "border": {
+                  "color": {
+                    "fixed": "rgba(255,255,255,0.3)"
+                  },
+                  "width": 1
+                }
+              },
+              "background": {
+                "color": {
+                  "fixed": "transparent",
+                  "field": "server1"
+                }
+              }
+            },
+            {
+              "id": "server2",
+              "name": "Server 2",
+              "type": "rectangle",
+              "placement": {
+                "top": 50,
+                "left": 580,
+                "width": 140,
+                "height": 80
+              },
+              "options": {
+                "content": "🇺🇸 New York — S02",
+                "text": {
+                  "size": 14,
+                  "color": "white"
+                },
+                "color": {
+                  "field": "server2",
+                  "mode": "thresholds"
+                },
+                "border": {
+                  "color": {
+                    "fixed": "rgba(255,255,255,0.3)"
+                  },
+                  "width": 1
+                }
+              },
+              "background": {
+                "color": {
+                  "fixed": "transparent",
+                  "field": "server2"
+                }
+              }
+            },
+            {
+              "id": "server3",
+              "name": "Server 3",
+              "type": "rectangle",
+              "placement": {
+                "top": 370,
+                "left": 80,
+                "width": 140,
+                "height": 80
+              },
+              "options": {
+                "content": "🇯🇵 Tokyo — S03",
+                "text": {
+                  "size": 14,
+                  "color": "white"
+                },
+                "color": {
+                  "field": "server3",
+                  "mode": "thresholds"
+                },
+                "border": {
+                  "color": {
+                    "fixed": "rgba(255,255,255,0.3)"
+                  },
+                  "width": 1
+                }
+              },
+              "background": {
+                "color": {
+                  "fixed": "transparent",
+                  "field": "server3"
+                }
+              }
+            },
+            {
+              "id": "server4",
+              "name": "Server 4",
+              "type": "rectangle",
+              "placement": {
+                "top": 370,
+                "left": 580,
+                "width": 140,
+                "height": 80
+              },
+              "options": {
+                "content": "🇬🇧 London — S04",
+                "text": {
+                  "size": 14,
+                  "color": "white"
+                },
+                "color": {
+                  "field": "server4",
+                  "mode": "thresholds"
+                },
+                "border": {
+                  "color": {
+                    "fixed": "rgba(255,255,255,0.3)"
+                  },
+                  "width": 1
+                }
+              },
+              "background": {
+                "color": {
+                  "fixed": "transparent",
+                  "field": "server4"
+                }
+              }
+            }
+          ],
+          "name": "Root",
+          "placement": {
+            "height": 500,
+            "width": 800
+          },
+          "type": "frame"
+        }
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "influxdb",
+            "uid": "InfluxDB"
+          },
+          "query": "from(bucket: \"server-metrics\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r[\"_measurement\"] == \"server_metrics\")\n  |> filter(fn: (r) => r[\"_field\"] == \"load_score\")\n  |> last()\n  |> group()\n  |> pivot(rowKey:[\"_measurement\"], columnKey: [\"server_id\"], valueColumn: \"_value\")\n  |> drop(columns: [\"_time\", \"_measurement\", \"_start\", \"_stop\", \"_field\"])",
+          "refId": "A"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "#EAB839",
+                "value": 60
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "datasource": {
+        "type": "influxdb",
+        "uid": "InfluxDB"
+      },
+      "gridPos": {
+        "h": 14,
+        "w": 8,
+        "x": 16,
+        "y": 6
+      },
+      "id": 4,
+      "title": "Server Load Distribution",
+      "type": "gauge",
+      "targets": [
+        {
+          "datasource": {
+            "type": "influxdb",
+            "uid": "InfluxDB"
+          },
+          "query": "from(bucket: \"server-metrics\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r._measurement == \"server_metrics\" and r._field == \"load_score\")\n  |> last()",
+          "refId": "A"
+        }
+      ],
+      "options": {
+        "reduceOptions": {
+          "calcs": [
+            "last"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showThresholdLabels": true,
+        "showThresholdMarkers": true,
+        "orientation": "vertical"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "min": 0,
+          "max": 100,
+          "unit": "percent",
+          "color": {
+            "mode": "thresholds"
+          },
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "#EAB839",
+                "value": 60
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "collapsed": false,
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 20
+      },
+      "id": 102,
+      "title": "📈 REAL-TIME ANALYTICS",
+      "type": "row"
+    },
+    {
+      "datasource": {
+        "type": "influxdb",
+        "uid": "InfluxDB"
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 0,
+        "y": 21
+      },
+      "id": 2,
+      "title": "CPU Usage (%)",
+      "type": "timeseries",
+      "targets": [
+        {
+          "datasource": {
+            "type": "influxdb",
+            "uid": "InfluxDB"
+          },
+          "query": "from(bucket: \"server-metrics\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r._measurement == \"server_metrics\" and r._field == \"cpu\")\n  |> aggregateWindow(every: v.windowPeriod, fn: mean, createEmpty: false)",
+          "refId": "A"
+        }
+      ],
+      "options": {
+        "legend": {
+          "displayMode": "table",
+          "placement": "bottom",
+          "showLegend": true,
+          "calcs": [
+            "mean",
+            "max"
+          ]
+        },
+        "tooltip": {
+          "mode": "multi"
+        }
+      },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "percent",
+          "min": 0,
+          "max": 100,
+          "custom": {
+            "drawStyle": "line",
+            "lineInterpolation": "smooth",
+            "fillOpacity": 15,
+            "gradientMode": "scheme",
+            "lineWidth": 2,
+            "pointSize": 4,
+            "showPoints": "auto"
+          },
+          "color": {
+            "mode": "palette-classic"
+          },
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "#EAB839",
+                "value": 60
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "datasource": {
+        "type": "influxdb",
+        "uid": "InfluxDB"
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 12,
+        "y": 21
+      },
+      "id": 30,
+      "title": "RAM Usage (%)",
+      "type": "timeseries",
+      "targets": [
+        {
+          "datasource": {
+            "type": "influxdb",
+            "uid": "InfluxDB"
+          },
+          "query": "from(bucket: \"server-metrics\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r._measurement == \"server_metrics\" and r._field == \"ram\")\n  |> aggregateWindow(every: v.windowPeriod, fn: mean, createEmpty: false)",
+          "refId": "A"
+        }
+      ],
+      "options": {
+        "legend": {
+          "displayMode": "table",
+          "placement": "bottom",
+          "showLegend": true,
+          "calcs": [
+            "mean",
+            "max"
+          ]
+        },
+        "tooltip": {
+          "mode": "multi"
+        }
+      },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "percent",
+          "min": 0,
+          "max": 100,
+          "custom": {
+            "drawStyle": "line",
+            "lineInterpolation": "smooth",
+            "fillOpacity": 15,
+            "gradientMode": "scheme",
+            "lineWidth": 2,
+            "pointSize": 4,
+            "showPoints": "auto"
+          },
+          "color": {
+            "mode": "palette-classic"
+          },
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "#EAB839",
+                "value": 60
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "datasource": {
+        "type": "influxdb",
+        "uid": "InfluxDB"
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 0,
+        "y": 29
+      },
+      "id": 31,
+      "title": "Load Score Trend",
+      "type": "timeseries",
+      "targets": [
+        {
+          "datasource": {
+            "type": "influxdb",
+            "uid": "InfluxDB"
+          },
+          "query": "from(bucket: \"server-metrics\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r._measurement == \"server_metrics\" and r._field == \"load_score\")\n  |> aggregateWindow(every: v.windowPeriod, fn: mean, createEmpty: false)",
+          "refId": "A"
+        }
+      ],
+      "options": {
+        "legend": {
+          "displayMode": "table",
+          "placement": "bottom",
+          "showLegend": true,
+          "calcs": [
+            "mean",
+            "max",
+            "last"
+          ]
+        },
+        "tooltip": {
+          "mode": "multi"
+        }
+      },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "percent",
+          "min": 0,
+          "max": 100,
+          "custom": {
+            "drawStyle": "line",
+            "lineInterpolation": "smooth",
+            "fillOpacity": 20,
+            "gradientMode": "scheme",
+            "lineWidth": 2,
+            "pointSize": 4,
+            "showPoints": "auto",
+            "thresholdsStyle": {
+              "mode": "area"
+            }
+          },
+          "color": {
+            "mode": "palette-classic"
+          },
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "transparent",
+                "value": null
+              },
+              {
+                "color": "rgba(234, 184, 57, 0.1)",
+                "value": 60
+              },
+              {
+                "color": "rgba(255, 0, 0, 0.15)",
+                "value": 80
+              }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "datasource": {
+        "type": "influxdb",
+        "uid": "InfluxDB"
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 12,
+        "y": 29
+      },
+      "id": 32,
+      "title": "Network Traffic (Mbps)",
+      "type": "timeseries",
+      "targets": [
+        {
+          "datasource": {
+            "type": "influxdb",
+            "uid": "InfluxDB"
+          },
+          "query": "from(bucket: \"server-metrics\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r._measurement == \"server_metrics\" and r._field == \"network_mbps\")\n  |> aggregateWindow(every: v.windowPeriod, fn: mean, createEmpty: false)",
+          "refId": "A"
+        }
+      ],
+      "options": {
+        "legend": {
+          "displayMode": "table",
+          "placement": "bottom",
+          "showLegend": true,
+          "calcs": [
+            "mean",
+            "max"
+          ]
+        },
+        "tooltip": {
+          "mode": "multi"
+        }
+      },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "Mbps",
+          "custom": {
+            "drawStyle": "bars",
+            "fillOpacity": 50,
+            "gradientMode": "scheme",
+            "lineWidth": 0,
+            "barAlignment": 0
+          },
+          "color": {
+            "mode": "palette-classic"
+          }
+        }
+      }
+    }
+  ],
+  "refresh": "5s",
+  "schemaVersion": 38,
+  "style": "dark",
+  "time": {
+    "from": "now-15m",
+    "to": "now"
+  },
+  "title": "IoT Load Balancer Hub",
+  "uid": "be31qogemg800a",
+  "version": 30
+}

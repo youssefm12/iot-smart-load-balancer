@@ -1,0 +1,8 @@
+{
+  "name": "node-red-project",
+  "description": "IoT Server Monitor Node-RED Dependencies",
+  "version": "1.0.0",
+  "dependencies": {
+    "node-red-contrib-influxdb": "~0.7.0"
+  }
+}

@@ -1,0 +1,6 @@
+{
+    "mqtt-broker-config": {
+        "user": "iot_admin",
+        "password": "iot_secure_123"
+    }
+}
